@@ -14,7 +14,9 @@ runBtn.addEventListener('click', function(){
         temp = PARTICLE_SPEED;
     }
     console.log(temp);
-    var vel = Math.sqrt(3 * parseInt(temp) * 8.31/ 0.15999);
+    recent = engine.timing.timestamp;
+    momentum = 0;
+    var vel = Math.sqrt(3 * parseInt(temp) * 8.31/ 0.15999)/100;
     PARTICLE_SPEED = vel;
     console.log("particle speed: " + PARTICLE_SPEED.toString());
     for(var i=0;i<numParticle;i++){
@@ -25,9 +27,17 @@ runBtn.addEventListener('click', function(){
     console.log('run');
 });
 
+window.setInterval(function(){
+    var timeText = document.getElementById('timeText');
+    timeText.innerHTML = "Pressure: " + (48.13 * momentum / ((engine.timing.timestamp - recent))).toString();
+    console.log(engine.timing.timestamp - recent);
+}, 1000);
+
 endBtn.addEventListener('click', function(){
     clearWorld();
     createWorld();
+    momentum = 0;
+    recent = engine.timing.timestamp;
 });
 
 function chooseString(string){

@@ -16,9 +16,12 @@ let engine;
 let render;
 let runner;
 let numParticle;
+let recent = 0;
 let WIDTH = 800;
 let HEIGHT = 800;
 let PARTICLE_SPEED = 3;
+
+let momentum = 0;
 
 function init() {
     // create an engine
@@ -53,10 +56,22 @@ function init() {
         e.pairs.forEach(pair => {
             var bodyA= pair.bodyA;
             var bodyB = pair.bodyB;
-            if (bodyA.label === "wallH") Body.setVelocity(bodyB, { x: bodyB.velocity.x, y: -bodyB.velocity.y }) //Horizontal wall collision
-            else if (bodyB.label === "wallH") Body.setVelocity(bodyA, { x: bodyA.velocity.x, y: -bodyA.velocity.y }) //Horizontal wall collision
-            else if (bodyA.label === "wallV") Body.setVelocity(bodyB, { x: -bodyB.velocity.x, y: bodyB.velocity.y }) //Vertical wall collision
-            else if (bodyB.label === "wallV") Body.setVelocity(bodyA, { x: -bodyA.velocity.x, y: bodyA.velocity.y }) //Vertical wall collision
+            if (bodyA.label === "wallH") {
+                Body.setVelocity(bodyB, { x: bodyB.velocity.x, y: -bodyB.velocity.y }) //Horizontal wall collision
+                momentum += Math.abs(bodyB.velocity.y) * 2;
+            }
+            else if (bodyB.label === "wallH") {
+                Body.setVelocity(bodyA, { x: bodyA.velocity.x, y: -bodyA.velocity.y }) //Horizontal wall collision
+                momentum += Math.abs(bodyB.velocity.y) * 2;
+            }
+            else if (bodyA.label === "wallV") {
+                Body.setVelocity(bodyB, { x: -bodyB.velocity.x, y: bodyB.velocity.y }) //Vertical wall collision
+                momentum += Math.abs(bodyB.velocity.x) * 2;
+            }
+            else if (bodyB.label === "wallV") {
+                Body.setVelocity(bodyA, { x: -bodyA.velocity.x, y: bodyA.velocity.y }) //Vertical wall collision
+               momentum += Math.abs(bodyB.velocity.x) * 2;
+            }
             else { //Two balls collision
                 const vAXBefore = bodyA.velocity.x;
                 const vBXBefore = bodyB.velocity.x;
@@ -80,23 +95,23 @@ function clearWorld() {
 
 function createWorld(){
     clearWorld("Wall")
-    let floor = Bodies.rectangle(0, HEIGHT, WIDTH * 2, 1, {
+    let floor = Bodies.rectangle(0, HEIGHT, WIDTH * 2, 10, {
         isStatic: true,
         restitution: 1,
         label: "wallH"
     });
     
-    let ceil = Bodies.rectangle(0,0 ,WIDTH*2, 1, {
+    let ceil = Bodies.rectangle(0,0 ,WIDTH*2, -10, {
         isStatic: true,
         restitution: 1,
         label: "wallH"
     });
-    let leftWall = Bodies.rectangle(0,0,1, HEIGHT*2, {
+    let leftWall = Bodies.rectangle(0,0,-10, HEIGHT*2, {
         isStatic: true,
         restitution: 1,
         label: "wallV"
     });
-    let rightWall = Bodies.rectangle(WIDTH, 0 ,1, HEIGHT*2, {
+    let rightWall = Bodies.rectangle(WIDTH, 0 ,10, HEIGHT*2, {
         isStatic: true,
         restitution: 1,
         label: "wallV"
@@ -112,7 +127,7 @@ let makeParticle = function() {
             (particleMargin / 2),
         (Math.random() * (HEIGHT - particleMargin)) +
             (particleMargin / 2),
-        3, {
+        1.52, {
             render: {
                 fillStyle: '#6666A0',
                 lineWidth: 1.5
@@ -124,8 +139,8 @@ let makeParticle = function() {
                 attractors: [
                     function(bodyA, bodyB) {
                           var force = {
-                            x: (bodyA.position.x - bodyB.position.x) * 1e-9,
-                            y: (bodyA.position.y - bodyB.position.y) * 1e-9,
+                            x: (bodyA.position.x - bodyB.position.x) * 1e-14,
+                            y: (bodyA.position.y - bodyB.position.y) * 1e-14,
                           };
                           // apply force to both bodies
                           Body.applyForce(bodyA, bodyA.position, Matter.Vector.neg(force));
