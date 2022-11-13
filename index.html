@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="matter-js/build/matter.js"></script>
+    <script src="matter-attractors/build/matter-attractors.js"></script>
+    <style>
+        canvas{
+            position: relative;
+            width: 500px;
+            height: 500px;
+            background-color: blue;
+        }
+        .inputBox{
+            column-count: 3;
+        }
+        .box {
+            margin: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+        }
+
+        .box > *{
+            margin: 10px;
+        }
+
+        .col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .row {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+        }
+        button{
+            margin: 10px;
+        }
+    </style>
+    <script src="support.js"></script>
+    <script src="main.js"></script>
+
+</head>
+<body onload='init()'>
+  
+    <div class="col">
+        <div id="areaToRender"></div>
+
+            <div class="row">
+                <button id='run'>Start</button>
+                <button id='update'>Update</button>
+                <button id='pause'>Pause</button>
+                <button id='end'>End</button>
+            </div>
+        <div>
+            <div class="box">
+                <div><h5>Intermolecular Force</h5><input type="text" id="inter"></div>
+                <div><h5>Temperature</h5><input type="text" id="temperature"></div>
+                <div><h5>Number of Particle</h5><input type="text" id="numParticle"></div>
+                <div><h5>Time Scale</h5><input type="text" id="time"></div>
+            </div>
+        </div>
+        <button id='setBtn'>Set Value</button>
+
+        <div>
+            <div class="box">
+                <h5 id="particleText" >Number of Particle: 10</h5>
+                <h5 id="temperatureText" >Temperature: 300</h5>
+                <h5 id="interText" >Intermolecular Force: 20</h5>
+                <h5 id="timeText">Pressure Value</h5>
+            </div>
+        </div>
+    </div>
+    <script src="setBtn.js"></script>
+    <script src="run.js"></script>
+</body>
+</html>
