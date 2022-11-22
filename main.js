@@ -19,9 +19,13 @@ let numParticle;
 let recent = 0;
 let WIDTH = 800;
 let HEIGHT = 800;
-let PARTICLE_SPEED = 3;
-
+let PARTICLE_SPEED = 227969235.5;
+let TEMPERATURE = 300;
 let momentum = 0;
+
+function addMomentum(input){
+
+}
 
 function init() {
     // create an engine
@@ -86,6 +90,8 @@ function init() {
             }
         })
     })
+    console.log(engine);
+
 }
 
 let lastClear = "(not given)"
@@ -155,8 +161,8 @@ let makeParticle = function() {
 
     const direction = Math.random() * Math.PI * 2;
     Matter.Body.setVelocity(p, {
-        x: Math.sin(direction) * PARTICLE_SPEED,
-        y: Math.cos(direction) * PARTICLE_SPEED
+        x: Math.sin(direction) * PARTICLE_SPEED*Math.pow(10, -8),
+        y: Math.cos(direction) * PARTICLE_SPEED*Math.pow(10, -8)
     });
 
 
